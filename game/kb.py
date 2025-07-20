@@ -10,3 +10,5 @@ MENU = {
     K.DOWN: CursorMove(1),
     K.RETURN: Select(),
 }
+
+IN_GAME = {}

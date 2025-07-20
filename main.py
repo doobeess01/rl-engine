@@ -1,6 +1,8 @@
 from pathlib import Path
 
 import tcod
+import tcod.ecs
+
 import g
 
 from game.states import MainMenu

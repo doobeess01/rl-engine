@@ -2,7 +2,14 @@ import g
 
 import game.kb as kb
 from game.state import State
+
 from game.action import Action, Pass
+from game.actions import BeginGame, QuitGame
+
+from game.tiles import TILES
+
+from game.tags import IsIn
+from game.components import MapShape, Tiles
 
 class Menu(State):
     '''Basic 1D menu state with no rendering.'''
@@ -17,20 +24,7 @@ class Menu(State):
         elif self.cursor > len(self.options) - 1:
             self.cursor = 0
     def select(self):
-        self.options[self.cursor][1].execute()
-
-
-MAIN_MENU_OPTIONS = [('Play', Pass()), ('Achievements', Pass()), ('Quit', Pass()),]
-
-
-# Main menu config (move to JSON or something?)
-
-MAIN_MENU_TITLE = 'UNTITLED SURVIVAL GAME'
-MAIN_MENU_TITLE_POSITION = ()
-
-MAIN_MENU_OPTIONS_OFFSET = (3,9)
-MAIN_MENU_OPTIONS_STEP = 2
-MAIN_MENU_CURSOR = '> '
+        self.options[self.cursor][1](g.player)
 
 
 class MainMenu(Menu):
@@ -38,6 +32,27 @@ class MainMenu(Menu):
         super().__init__(MAIN_MENU_OPTIONS)
     def render(self):
         g.console.draw_frame(0,0,g.console.width,g.console.height,fg=(255,0,0))
+        g.console.print(*MAIN_MENU_TITLE_POSITION, MAIN_MENU_TITLE)
         for i,option in enumerate(self.options):
             cursor_text = MAIN_MENU_CURSOR if i==self.cursor else ''
             g.console.print(MAIN_MENU_OPTIONS_OFFSET[0],MAIN_MENU_OPTIONS_OFFSET[1]+(MAIN_MENU_OPTIONS_STEP*i),cursor_text+option[0])
+
+
+class InGame(State):
+    def __init__(self):
+        super().__init__(keybindings=kb.IN_GAME)
+    def render(self):
+        map_ = g.player.relation_tag[IsIn]
+        g.console.rgb[0:map_.components[MapShape][0], 0:map_.components[MapShape][1]] = TILES['graphic'][map_.components[Tiles]]
+
+
+MAIN_MENU_OPTIONS = [('Play', BeginGame(InGame())), ('Achievements', Pass()), ('Quit', QuitGame()),]
+
+# Main menu config (move to JSON or something?)
+
+MAIN_MENU_TITLE = 'UNTITLED RL'
+MAIN_MENU_TITLE_POSITION = (2,2)
+
+MAIN_MENU_OPTIONS_OFFSET = (3,9)
+MAIN_MENU_OPTIONS_STEP = 2
+MAIN_MENU_CURSOR = '> '
