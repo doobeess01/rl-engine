@@ -19,8 +19,9 @@ def init_world():
 
     map_ = generate_level(20,20)
 
-    from game.templates.creatures import PLAYER  # Can't be imported earlier because of when the registry is init
-    g.player = spawn_creature(PLAYER, map_, Position(1,1))
+    from game.templates.creatures import PLAYER, MONSTER  # Can't be imported earlier because of when the registry is init
+    g.player = spawn_creature(PLAYER, map_, position=Position(1,1))
+    spawn_creature(MONSTER, map_, position=Position(5,5))
 
     enter_level(map_)
     
