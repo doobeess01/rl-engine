@@ -16,7 +16,7 @@ class Action:
     def __call__(self, actor):
         self.execute(actor)
         if self.cost > -1:
-            g.queue.move_front(actor)
+            g.queue().move_front(self.cost)
 
     def execute(self, actor: Entity):
         pass

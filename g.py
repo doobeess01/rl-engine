@@ -1,7 +1,7 @@
 import tcod
 import tcod.ecs
 
-import game.queue
+from game.queue import Queue
 
 console: tcod.console.Console
 context: tcod.context.Context
@@ -9,6 +9,7 @@ context: tcod.context.Context
 registry: tcod.ecs.Registry
 player: tcod.ecs.Entity
 
-queue: game.queue.Queue
+def queue():
+    return registry[None].components[Queue]
 
 templates: dict[str: tcod.ecs.Entity]

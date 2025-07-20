@@ -16,7 +16,6 @@ def init_world():
     g.templates = {}
 
     g.registry[None].components[Queue] = Queue()
-    g.queue = g.registry[None].components[Queue]
 
     map_ = generate_level(20,20)
 
@@ -27,7 +26,7 @@ def init_world():
     
 
 def enter_level(map_):
-    g.queue.clear()
-    g.queue.add(g.player)
+    g.queue().clear()
+    g.queue().add(g.player)
     for entity in g.registry.Q.all_of(relations=[(IsIn, map_)]):
-        g.queue.add(entity)
+        g.queue().add(entity)

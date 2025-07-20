@@ -17,7 +17,9 @@ class Queue:
             self.queue[min(self.queue)+cost].append(self.front)
         except KeyError:
             self.queue[min(self.queue)+cost] = [self.front]
-        del self.front
+        del self.queue[min(self.queue)][0]
+        if not len(self.queue[min(self.queue)]):
+            del self.queue[min(self.queue)]
     
     def add(self, actor):
         if self.queue:

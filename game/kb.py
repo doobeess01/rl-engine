@@ -3,7 +3,7 @@
 
 from tcod.event import KeySym as K, Modifier as M
 
-from game.actions import CursorMove, Select
+from game.actions import CursorMove, Select, Wait
 
 MENU = {
     K.UP: CursorMove(-1),
@@ -11,4 +11,7 @@ MENU = {
     K.RETURN: Select(),
 }
 
-IN_GAME = {}
+IN_GAME = {
+    K.PERIOD: Wait(),
+    K.N5: Wait(),
+}
