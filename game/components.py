@@ -1,6 +1,21 @@
+import attrs
 import numpy as np
-
 from typing import Final
+
+
+# General
+
+@attrs.define
+class Position:
+    x: int
+    y: int
+
+    @property
+    def ij(self):
+        return self.y, self.x
+
+    def __add__(self, other: tuple[int, int]):
+        return self.__class__(self.x+other[0], self.y+other[1])
 
 
 # Map

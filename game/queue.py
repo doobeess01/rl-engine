@@ -20,7 +20,10 @@ class Queue:
         del self.front
     
     def add(self, actor):
-        self.queue[min(self.queue)].append(actor)
+        if self.queue:
+            self.queue[min(self.queue)].append(actor)
+        else:
+            self.queue[0] = [actor]
 
     def remove(self, actor):
         for position in self.queue:
@@ -28,4 +31,6 @@ class Queue:
                 del self.queue[position]
                 return
         raise QueueError('Tried to remove a nonexistent actor')
-    
+
+    def clear(self):
+        self.queue = {}
