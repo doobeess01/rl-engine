@@ -17,6 +17,9 @@ class Position:
     def __add__(self, other: tuple[int, int]):
         return self.__class__(self.x+other[0], self.y+other[1])
 
+    def __hash__(self):
+        return hash((self.x, self.y))
+
 
 @attrs.define
 class Graphic:

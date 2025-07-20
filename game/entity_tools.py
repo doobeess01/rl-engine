@@ -2,7 +2,7 @@ from tcod.ecs import Entity
 
 import g
 from game.components import Position
-from game.tags import IsIn
+from game.tags import IsActor, IsIn
 
 
 def spawn_entity(template: Entity, map_: Entity, position: Position = None, components: dict = {}, tags: set = {}) -> Entity:
@@ -14,10 +14,9 @@ def spawn_entity(template: Entity, map_: Entity, position: Position = None, comp
     return entity
 
 
-# TODO: Assess if the two below functions are actually needed
-
 def spawn_creature(template: Entity, map_: Entity, position: Position = None, components: dict = {}, tags: set = {}) -> Entity:
     creature = spawn_entity(template, map_, position=position, components=components, tags=tags)
+    creature.tags.add(IsActor)
     return creature
 
 def spawn_item(template: Entity, map_: Entity, position: Position = None, components: dict = {}, tags: set = {}) -> Entity:

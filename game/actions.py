@@ -1,3 +1,5 @@
+import attrs
+
 import g
 
 from game.action import Action
@@ -5,11 +7,49 @@ from game.state import State
 
 from game.world_tools import init_world
 
+from game.tiles import TILES
+from game.components import Position, Tiles
+from game.tags import IsActor, IsIn
+
 # GAME ACTIONS
 
 class Wait(Action):
     def __init__(self):
         super().__init__(cost=100)
+
+@attrs.define
+class Bump(Action):
+    def __init__(self, direction):
+        self.direction = direction
+        super().__init__(cost=100)
+
+    def execute(self, actor):
+        blocking_entities = [e for e in actor.registry.Q.all_of(tags=[IsActor, actor.components[Position]+self.direction])]
+        if blocking_entities:
+            Melee(blocking_entities[0])(actor)
+        else:
+            Move(self.direction)(actor)
+
+
+class Move(Action):    
+    def __init__(self, direction):
+        self.direction = direction
+        super().__init__(cost=100)
+
+    def execute(self, actor):
+        map_ = actor.relation_tag[IsIn]
+        new_position = actor.components[Position] + self.direction
+        if TILES['walk_cost'][map_.components[Tiles][new_position.ij]]>0:
+            actor.components[Position] = new_position
+
+
+class Melee(Action):
+    def __init__(self, direction):
+        self.direction = direction
+        super().__init__(cost=100)
+
+    def execute(self, actor):
+        pass
 
 
 # UI ACTIONS
