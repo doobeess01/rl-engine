@@ -15,13 +15,20 @@ def new_creature(
         components = {Name: name, Graphic: graphic, Description: desc, HP: hp,}|components,
         tags = tags
     )
-    g.templates[name] = entity
+
+    return entity
 
 
-def init_creatures():
-    new_creature(
-        name='player',
-        graphic=Graphic(ord('@'), (255,255,255), (0,0,0)),
-        desc="You're you.",
-        hp=15,
-    )
+PLAYER = new_creature(
+    name='player',
+    graphic=Graphic(ord('@'), (255,255,255), (0,0,0)),
+    desc="You're you.",
+    hp=15,
+)
+
+MONSTER = new_creature(
+    name='monster',
+    graphic=Graphic(ord('M'), (255,0,0), (0,0,0)),
+    desc="It's a horrible monster!",
+    hp=5,
+)
