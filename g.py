@@ -10,3 +10,5 @@ registry: tcod.ecs.Registry
 player: tcod.ecs.Entity
 
 queue: game.queue.Queue
+
+templates: dict[str: tcod.ecs.Entity]

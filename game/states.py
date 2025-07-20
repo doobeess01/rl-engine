@@ -9,7 +9,7 @@ from game.actions import BeginGame, QuitGame
 from game.tiles import TILES
 
 from game.tags import IsIn
-from game.components import MapShape, Tiles
+from game.components import Position, Graphic, MapShape, Tiles
 
 class Menu(State):
     '''Basic 1D menu state with no rendering.'''
@@ -44,6 +44,11 @@ class InGame(State):
     def render(self):
         map_ = g.player.relation_tag[IsIn]
         g.console.rgb[0:map_.components[MapShape][0], 0:map_.components[MapShape][1]] = TILES['graphic'][map_.components[Tiles]]
+
+        for entity in g.registry.Q.all_of(components=[Graphic, Position], relations=[(IsIn, map_)]):
+            pos = entity.components[Position]
+            graphic = entity.components[Graphic]
+            g.console.rgb[pos.ij] = graphic.ch, graphic.fg, graphic.bg
 
 
 MAIN_MENU_OPTIONS = [('Play', BeginGame(InGame())), ('Achievements', Pass()), ('Quit', QuitGame()),]
