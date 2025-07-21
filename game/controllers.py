@@ -29,9 +29,4 @@ class Hostile(Controller):
         path = path_to(actor, player_pos)
         if path:
             dest = path[0]
-            if [e for e in actor.registry.Q.all_of(components=[Position], tags=[dest, IsActor]) if e != g.player]:
-                # If an actor would hit another actor other than the player, wait instead.
-                return Wait()
-            else:
-                # If the path is clear, attack!
-                return Bump((dest.x - actor.components[Position].x, dest.y-actor.components[Position].y))
+            return Bump((dest.x - actor.components[Position].x, dest.y-actor.components[Position].y))

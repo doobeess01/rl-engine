@@ -28,5 +28,5 @@ def spawn_item(template: Entity, map_: Entity, position: Position = None, compon
 
 def kill(actor: Entity):
     g.queue().remove(actor)
-    log(f'{actor.components[Name]} dies!', fg=msg.DEATH) # message log 'entity died!'
+    log(f'{actor.components[Name]} dies!', msg.DEATH) # message log 'entity died!'
     actor.clear()

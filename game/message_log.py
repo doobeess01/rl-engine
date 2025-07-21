@@ -22,7 +22,7 @@ class MessageLog:
     def __init__(self, width=None):
         self.width = width
         self.messages = []
-    def log(self, text: str, fg: tuple[int, int, int] = (255,255,255), bg: tuple[int, int, int] = (0,0,0)):
+    def log(self, text: str, fg: tuple[int, int, int], bg: tuple[int, int, int]):
         message = Message(text, fg, bg)
         try:
             if message == self.messages[-1]:
@@ -38,6 +38,6 @@ class MessageLog:
     def clear(self):
         self.messages = []
 
-def log(text: str, fg=(255,255,255), bg=(0,0,0)):
+def log(text: str, colors: tuple[tuple] = ((255,255,255), (0,0,0))):
     '''Wrapper function for ease of use when interacting with the message log.'''
-    g.registry[None].components[MessageLog].log(text, fg=fg, bg=bg)
+    g.registry[None].components[MessageLog].log(text, colors[0], colors[1])

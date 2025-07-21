@@ -61,7 +61,8 @@ class Melee(Action):
 
     def execute(self, actor):
         damage = actor.components[Attack]
-        log(f'{actor.components[Name]} attacks {self.target.components[Name]} for {damage} damage!', fg=msg.ATTACK)
+        colors = msg.ATTACK if actor != g.player else ((255,255,255),(0,0,0))
+        log(f'{actor.components[Name]} attacks {self.target.components[Name]} for {damage} damage!', colors)
         self.target.components[HP] -= damage
 
 
