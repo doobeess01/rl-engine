@@ -11,8 +11,8 @@ from game.controller import Controller
 from game.components import Name
 
 
-CONSOLE_WIDTH = 20
-CONSOLE_HEIGHT = 20
+CONSOLE_WIDTH = 40
+CONSOLE_HEIGHT = 25
 
 
 THIS_DIR = Path(__file__, "..")

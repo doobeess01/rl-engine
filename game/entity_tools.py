@@ -4,6 +4,9 @@ import g
 from game.components import Position, Name
 from game.tags import IsActor, IsIn
 
+from game.message_log import log
+import game.msg as msg
+
 
 def spawn_entity(template: Entity, map_: Entity, position: Position = None, components: dict = {}, tags: set = {}) -> Entity:
     entity = template.instantiate()
@@ -25,5 +28,5 @@ def spawn_item(template: Entity, map_: Entity, position: Position = None, compon
 
 def kill(actor: Entity):
     g.queue().remove(actor)
-    print(f'{actor.components[Name]} dies!') # message log 'entity died!'
+    log(f'{actor.components[Name]} dies!', fg=msg.DEATH) # message log 'entity died!'
     actor.clear()

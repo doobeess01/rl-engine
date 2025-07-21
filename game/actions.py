@@ -9,9 +9,12 @@ from game.state import State
 
 from game.world_tools import init_world
 
+from game.message_log import log
+import game.msg as msg
+
 from game.tiles import TILES
 
-from game.components import Position, Tiles, HP, Attack
+from game.components import Position, Tiles, HP, Attack, Name
 from game.tags import IsActor, IsIn
 
 from game.entity_tools import kill
@@ -57,7 +60,9 @@ class Melee(Action):
         super().__init__(cost=100)
 
     def execute(self, actor):
-        self.target.components[HP] -= actor.components[Attack]
+        damage = actor.components[Attack]
+        log(f'{actor.components[Name]} attacks {self.target.components[Name]} for {damage} damage!', fg=msg.ATTACK)
+        self.target.components[HP] -= damage
 
 
 @callbacks.register_component_changed(component=HP)

@@ -3,6 +3,7 @@ import tcod.ecs
 import g
 
 from game.queue import Queue
+from game.message_log import MessageLog
 from game.procgen import generate_level
 from game.entity_tools import spawn_creature
 
@@ -16,8 +17,9 @@ def init_world():
     g.templates = {}
 
     g.registry[None].components[Queue] = Queue()
+    g.registry[None].components[MessageLog] = MessageLog(width=20)
 
-    map_ = generate_level(20,20)
+    map_ = generate_level((20,40))
 
     from game.templates.creatures import PLAYER, MONSTER  # Can't be imported earlier because of when the registry is init
     g.player = spawn_creature(PLAYER, map_, position=Position(1,1))

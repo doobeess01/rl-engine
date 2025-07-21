@@ -6,6 +6,8 @@ from game.state import State
 from game.action import Action, Pass
 from game.actions import BeginGame, QuitGame
 
+from game.message_log import MessageLog
+
 from game.tiles import TILES
 
 from game.tags import IsIn
@@ -49,6 +51,8 @@ class InGame(State):
             pos = entity.components[Position]
             graphic = entity.components[Graphic]
             g.console.rgb[pos.ij] = graphic.ch, graphic.fg, graphic.bg
+
+        g.registry[None].components[MessageLog].render(Position(0,21),4)
 
 
 MAIN_MENU_OPTIONS = [('Play', BeginGame(InGame())), ('Achievements', Pass()), ('Quit', QuitGame()),]
