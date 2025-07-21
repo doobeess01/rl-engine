@@ -4,7 +4,7 @@ from game.controller import Controller
 from game.actions import Bump, Wait
 from game.tiles import TILES
 from game.components import Position, Tiles
-from game.tags import IsIn
+from game.tags import IsIn, IsActor
 
 
 class Wander(Controller):
@@ -14,6 +14,7 @@ class Wander(Controller):
         while directions:
             direction = random.choice(directions)
             new_position = actor.components[Position] + direction
-            if TILES['walk_cost'][map_.components[Tiles][new_position.ij]]>0:
+            blocking_entities = [e for e in actor.registry.Q.all_of(tags=[IsActor, actor.components[Position]+direction])]
+            if TILES['walk_cost'][map_.components[Tiles][new_position.ij]]>0 and not blocking_entities:
                 return Bump(direction)
         return Wait()

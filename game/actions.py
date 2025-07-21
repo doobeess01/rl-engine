@@ -2,14 +2,20 @@ import attrs
 
 import g
 
+from tcod.ecs import callbacks, Entity
+
 from game.action import Action
 from game.state import State
 
 from game.world_tools import init_world
 
 from game.tiles import TILES
-from game.components import Position, Tiles
+
+from game.components import Position, Tiles, HP, Attack
 from game.tags import IsActor, IsIn
+
+from game.entity_tools import kill
+
 
 # GAME ACTIONS
 
@@ -43,13 +49,22 @@ class Move(Action):
             actor.components[Position] = new_position
 
 
+
+
 class Melee(Action):
-    def __init__(self, direction):
-        self.direction = direction
+    def __init__(self, target):
+        self.target = target
         super().__init__(cost=100)
 
     def execute(self, actor):
-        pass
+        self.target.components[HP] -= actor.components[Attack]
+
+
+@callbacks.register_component_changed(component=HP)
+def on_hp_change(entity: Entity, old: int | None, new: int | None):
+    if new is not None:
+        if new < 1:
+            kill(entity)
 
 
 # UI ACTIONS

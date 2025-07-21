@@ -1,7 +1,7 @@
 from tcod.ecs import Entity
 
 import g
-from game.components import Position
+from game.components import Position, Name
 from game.tags import IsActor, IsIn
 
 
@@ -21,3 +21,9 @@ def spawn_creature(template: Entity, map_: Entity, position: Position = None, co
 
 def spawn_item(template: Entity, map_: Entity, position: Position = None, components: dict = {}, tags: set = {}) -> Entity:
     item = spawn_entity(template, map_, position=position, components=components, tags=tags)
+
+
+def kill(actor: Entity):
+    g.queue().remove(actor)
+    print(f'{actor.components[Name]} dies!') # message log 'entity died!'
+    actor.clear()
