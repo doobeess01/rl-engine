@@ -1,10 +1,13 @@
 import random
 
+import g
+
 from game.controller import Controller
 from game.actions import Bump, Wait
 from game.tiles import TILES
 from game.components import Position, Tiles
 from game.tags import IsIn, IsActor
+from game.travel import path_to
 
 
 class Wander(Controller):
@@ -18,3 +21,17 @@ class Wander(Controller):
             if TILES['walk_cost'][map_.components[Tiles][new_position.ij]]>0 and not blocking_entities:
                 return Bump(direction)
         return Wait()
+
+
+class Hostile(Controller):
+    def __call__(self, actor):
+        player_pos = g.player.components[Position]
+        path = path_to(actor, player_pos)
+        if path:
+            dest = path[0]
+            if [e for e in actor.registry.Q.all_of(components=[Position], tags=[dest, IsActor]) if e != g.player]:
+                # If an actor would hit another actor other than the player, wait instead.
+                return Wait()
+            else:
+                # If the path is clear, attack!
+                return Bump((dest.x - actor.components[Position].x, dest.y-actor.components[Position].y))
