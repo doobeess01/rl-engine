@@ -11,8 +11,8 @@ TILES = np.asarray(
     [
         ("void", (ord(" "), (0, 0, 0), (0, 0, 0)), 0, True),
         ("wall", (ord("#"), (0,255,0), (0,0,0)), 0, False),
+        ("window", (ord('#'), (255, 255, 255), (0, 0, 0)), 0, False),
         ("floor", (ord("."), (0,255,0), (0,0,0)), 1, True),
-        ("window", (ord('#'), (255, 255, 255), (0, 0, 0)), 1, False),
     ],
     dtype=[
         ("name", object),

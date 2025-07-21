@@ -8,8 +8,6 @@ import g
 from game.states import MainMenu
 from game.controller import Controller
 
-from game.components import Name
-
 
 CONSOLE_WIDTH = 100
 CONSOLE_HEIGHT = 64

@@ -30,3 +30,5 @@ class Hostile(Controller):
         if path:
             dest = path[0]
             return Bump((dest.x - actor.components[Position].x, dest.y-actor.components[Position].y))
+        else:
+            return Wander()(actor)

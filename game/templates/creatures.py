@@ -15,12 +15,12 @@ def new_creature(
         components: dict = {}, 
         tags: set = {},
         ):
-    entity = g.registry.new_entity(
+    creature = g.registry.new_entity(
         components = {Name: name, Graphic: graphic, Description: desc, HP: hp, Attack: attack, Controller: controller,}|components,
         tags = tags
     )
 
-    return entity
+    return creature
 
 
 PLAYER = new_creature(
