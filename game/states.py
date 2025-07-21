@@ -52,7 +52,7 @@ class InGame(State):
             graphic = entity.components[Graphic]
             g.console.rgb[pos.ij] = graphic.ch, graphic.fg, graphic.bg
 
-        g.registry[None].components[MessageLog].render(Position(0,21),4)
+        g.registry[None].components[MessageLog].render(Position(0,56),7)
 
 
 MAIN_MENU_OPTIONS = [('Play', BeginGame(InGame())), ('Achievements', Pass()), ('Quit', QuitGame()),]

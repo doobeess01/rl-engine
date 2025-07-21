@@ -19,7 +19,7 @@ def init_world():
     g.registry[None].components[Queue] = Queue()
     g.registry[None].components[MessageLog] = MessageLog(width=20)
 
-    map_ = generate_level((20,40))
+    map_ = generate_level((55,80))
 
     from game.templates.creatures import PLAYER, MONSTER  # Can't be imported earlier because of when the registry is init
     g.player = spawn_creature(PLAYER, map_, position=Position(1,1))

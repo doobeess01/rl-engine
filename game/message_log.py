@@ -10,17 +10,31 @@ class Message:
     text: str
     fg: tuple[int,int,int]
     bg: tuple[int,int,int]
+    count: int = 1
+
+    def __eq__(self, other):
+        if self.text == other.text and self.fg == other.fg and self.bg == other.bg:
+            return True
+        return False
+
 
 class MessageLog:
     def __init__(self, width=None):
         self.width = width
-        assert width > 3
         self.messages = []
     def log(self, text: str, fg: tuple[int, int, int] = (255,255,255), bg: tuple[int, int, int] = (0,0,0)):
-        self.messages.append((Message(text, fg, bg)))
+        message = Message(text, fg, bg)
+        try:
+            if message == self.messages[-1]:
+                self.messages[-1].count += 1
+                return
+        except IndexError:
+            pass
+        self.messages.append(message)
     def render(self, position: Position, rows: int):
         for i, message in enumerate(self.messages[-rows:]):
-            g.console.print(x=position.x, y=position.y+i, text=message.text, fg=message.fg, bg=message.bg)
+            multiple_text = f' (x{message.count})' if message.count > 1 else ''
+            g.console.print(x=position.x, y=position.y+i, text=message.text + multiple_text, fg=message.fg, bg=message.bg)
     def clear(self):
         self.messages = []
 
