@@ -8,6 +8,8 @@ import g
 from game.states import MainMenu
 from game.controller import Controller
 
+from game.components import Name
+
 
 CONSOLE_WIDTH = 20
 CONSOLE_HEIGHT = 20
@@ -30,7 +32,7 @@ def main():
                 # If there is a queue, process other actors actions until the player is at the front of the queue
                 while g.queue().front != g.player:
                     actor = g.queue().front
-                    action = actor.components[Controller].choose_action()  # The AI chooses an action
+                    action = actor.components[Controller](actor)  # The AI chooses an action
                     action(actor)  # Execute chosen action
             except NameError:
                 # If there is no queue, skip queue processing

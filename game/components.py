@@ -2,6 +2,8 @@ import attrs
 import numpy as np
 from typing import Final
 
+import tcod.ecs
+
 
 # General
 

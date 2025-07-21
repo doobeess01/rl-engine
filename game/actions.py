@@ -20,8 +20,8 @@ class Wait(Action):
 @attrs.define
 class Bump(Action):
     def __init__(self, direction):
+        super().__init__()
         self.direction = direction
-        super().__init__(cost=100)
 
     def execute(self, actor):
         blocking_entities = [e for e in actor.registry.Q.all_of(tags=[IsActor, actor.components[Position]+self.direction])]

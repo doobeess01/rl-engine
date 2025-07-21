@@ -34,5 +34,5 @@ MONSTER = new_creature(
     graphic=Graphic(ord('M'), (255,0,0), (0,0,0)),
     desc="It's a horrible monster!",
     hp=5,
+    controller=Wander(),
 )
-MONSTER.components[Controller] = Wander(MONSTER)

@@ -4,35 +4,41 @@ class QueueError(Exception):
     def __init__(self, message):
         super().__init__(message)
 
-class Queue:
-    def __init__(self, inital_state: dict[int:list[Entity]]={}):
-        self.queue = inital_state
+from tcod.ecs import Entity
 
+class QueueError(Exception):
+    pass
+
+class Queue:
+    def __init__(self):
+        self.queue = {}
+    
     @property
     def front(self):
         return self.queue[min(self.queue)][0]
     
-    def move_front(self, cost):
+    def move_front(self, time_spent):
+        chronoposition = time_spent + min(self.queue) # 8)
         try:
-            self.queue[min(self.queue)+cost].append(self.front)
+            self.queue[chronoposition].append(self.front)
         except KeyError:
-            self.queue[min(self.queue)+cost] = [self.front]
-        del self.queue[min(self.queue)][0]
-        if not len(self.queue[min(self.queue)]):
+            self.queue[chronoposition] = [self.front]
+        del self.queue[min(self.queue)][0]  # Not using the function here because I'm not sure it will work properly
+        if not self.queue[min(self.queue)]:
             del self.queue[min(self.queue)]
-    
-    def add(self, actor):
-        if self.queue:
-            self.queue[min(self.queue)].append(actor)
-        else:
-            self.queue[0] = [actor]
 
-    def remove(self, actor):
-        for position in self.queue:
-            if self.queue[position] == actor:
-                del self.queue[position]
+    def add(self, entity):
+        try:
+            self.queue[min(self.queue)].append(entity)
+        except ValueError:
+            self.queue[0] = [entity]
+
+    def remove(self, actor: Entity):
+        for chronoposition in self.queue:
+            if actor in self.queue[chronoposition]:
+                self.queue[chronoposition].remove(actor)
                 return
-        raise QueueError('Tried to remove a nonexistent actor')
-
+        raise QueueError('')
+    
     def clear(self):
         self.queue = {}

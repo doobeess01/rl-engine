@@ -22,6 +22,8 @@ def init_world():
     from game.templates.creatures import PLAYER, MONSTER  # Can't be imported earlier because of when the registry is init
     g.player = spawn_creature(PLAYER, map_, position=Position(1,1))
     spawn_creature(MONSTER, map_, position=Position(5,5))
+    spawn_creature(MONSTER, map_, position=Position(15,5))
+    spawn_creature(MONSTER, map_, position=Position(15,15))
 
     enter_level(map_)
     
@@ -30,4 +32,5 @@ def enter_level(map_):
     g.queue().clear()
     g.queue().add(g.player)
     for entity in g.registry.Q.all_of(relations=[(IsIn, map_)]):
-        g.queue().add(entity)
+        if entity != g.player:
+            g.queue().add(entity)

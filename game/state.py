@@ -14,8 +14,10 @@ class State:
             case KeyDown(sym=sym) if sym in self.keybindings:
                 action = self.keybindings[sym]
                 action(g.player)
+                return True
             case Quit():
                 raise SystemExit
+        return False
     def render(self):
         pass
     def exit(self):
