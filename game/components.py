@@ -44,8 +44,9 @@ Name: Final = ('Name', str)
 Description: Final = ('Description', str)
 
 HP: Final = ('HP', int)
-
 Attack: Final = ('Attack', int)
+
+Quantity: Final = ('Quantity', int)
 
 # Map
 

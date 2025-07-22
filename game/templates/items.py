@@ -1,6 +1,7 @@
 import g
 
-from game.components import Name, Graphic, Description, Stackable
+from game.components import Name, Graphic, Description
+from game.tags import IsStackable
 
 
 def new_item(
@@ -12,9 +13,11 @@ def new_item(
         tags: set = {},
         ):
     item = g.registry.new_entity(
-        components = {Name: name, Graphic: graphic, Description: desc, Stackable: stackable}|components,
+        components = {Name: name, Graphic: graphic, Description: desc}|components,
         tags = tags
     )
+    if stackable:
+        item.tags.add(IsStackable)
 
     return item
 
@@ -22,4 +25,5 @@ def new_item(
 POTION = new_item(
     name = 'potion',
     graphic = Graphic(ord('!'), (100,100,255),(0,0,0)),
+    desc = 'A potion',
 )
