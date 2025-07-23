@@ -1,4 +1,4 @@
-# roguelike-engine
+# rl-engine
 
 An in-progress roguelike engine created using Python and TCOD.
 
