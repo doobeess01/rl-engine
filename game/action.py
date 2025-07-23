@@ -26,6 +26,7 @@ class Action:
 
 class Pass(Action):
     '''Do nothing. Has the same purpose as the pass keyword.'''
-
+    def __init__(self, *args):
+        super().__init__()
     def execute(self, actor):
         pass

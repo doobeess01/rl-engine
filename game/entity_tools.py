@@ -44,11 +44,11 @@ def spawn_item(template: Entity, map_: Entity, position: Position, quantity: int
         return item
 
 
-def inventory(entity: Entity, tags: list[str] = []):
+def inventory(entity: Entity, components: list = [], tags: list[str] = []):
     '''
     Return the inventory of an entity (all items with the IsIn relation to it)
     '''
-    return [e for e in entity.registry.Q.all_of(relations=[(IsIn, entity)], tags=tags)]
+    return [e for e in entity.registry.Q.all_of(relations=[(IsIn, entity)], components=components, tags=tags)]
 
 
 def add_to_inventory(item: Entity, actor: Entity):

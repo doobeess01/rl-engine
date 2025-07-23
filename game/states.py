@@ -11,7 +11,7 @@ from game.message_log import MessageLog
 
 from game.tiles import TILES
 
-from game.entity_tools import inventory
+from game.entity_tools import inventory, add_to_inventory
 
 from game.tags import IsIn, IsActor
 from game.components import Position, Graphic, Name, MapShape, Tiles, Quantity, ItemCategory, ITEM_CATEGORIES
@@ -85,7 +85,8 @@ class InGame(State):
             K.PERIOD: Wait(),
             K.N5: Wait(),
 
-            K.I: EnterSubstate(InventoryView())
+            K.I: EnterSubstate(InventoryView()),
+            K.COMMA: PickupItems(),
         }
         super().__init__(keybindings=IN_GAME)
     def render(self):
@@ -150,16 +151,26 @@ class ItemList(Menu):
 
     def render(self):
         if self.items:
-            g.console.draw_frame(5,5,max([len(option[0]) for option in self.options])+4,len(self.options)+4,fg=(255,255,255),bg=(0,0,0))
+            g.console.draw_frame(
+                5,5,
+                max([len(option[0]) for option in self.options])+(5*(max([item.components[Quantity] for item in self.items])>1))+4,len(self.options)+4,
+                fg=(255,255,255),bg=(0,0,0)
+            )
             g.console.print(6,6,'Inventory')
+            item_index = 0
             for i,option in enumerate(self.options):
                 indent = 3
                 if isinstance(option[1], ToggleCategoryVisibility):
                     indent = 0
+                    multiple_text = ''
+                else:
+                    quantity = self.items[item_index].components[Quantity]
+                    multiple_text = f' (x{str(quantity)})' if quantity > 1 else ''
+                    item_index += 1
                 color = ((255,255,255),(0,0,0))
                 if i == self.cursor:
                     color = ((0,0,0),(255,255,255))
-                g.console.print(6+indent,8+i,option[0], fg=color[0], bg=color[1])
+                g.console.print(6+indent,8+i, option[0]+multiple_text, fg=color[0], bg=color[1])
         else:
             text = 'You are carrying nothing.'
             g.console.draw_frame(5,5,len(text)+2,3,fg=(255,255,255),bg=(0,0,0))
@@ -172,6 +183,27 @@ class InventoryView(ItemList):
     def on_enter(self):
         self.items = inventory(g.player)
         super().on_enter()
+
+class PickupItems(Action):
+    def execute(self, actor: Entity):
+        items = inventory(actor.relation_tag[IsIn], components=[Quantity], tags=[actor.components[Position]])
+        if len(items) > 1:
+            EnterSubstate(PickupItemMenu(items))
+        elif len(items) > 0:
+            PickupItem(items[0])(actor)
+        else:
+            log('There is nothing here to pick up.', colors=((200,200,200), (0,0,0)))
+
+class PickupItem(Action):
+    def __init__(self, item):
+        self.item = item
+        super().__init__(cost=100)
+    def execute(self, actor):
+        add_to_inventory(self.item, actor)
+
+class PickupItemMenu(ItemList):
+    def __init__(self, items):
+        super().__init__(PickupItem, 'Pick up which?', items, no_item_text='THIS IS A BUG, please report it')
 
 
 MAIN_MENU_OPTIONS = [('Play', BeginGame(InGame())), ('Achievements', Pass()), ('Quit', QuitGame()),]
