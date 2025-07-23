@@ -11,7 +11,7 @@ from game.message_log import MessageLog
 
 from game.tiles import TILES
 
-from game.entity_tools import inventory, add_to_inventory
+from game.entity_tools import inventory, add_to_inventory, drop
 
 from game.tags import IsIn, IsActor
 from game.components import Position, Graphic, Name, MapShape, Tiles, Quantity, ItemCategory, ITEM_CATEGORIES
@@ -87,6 +87,7 @@ class InGame(State):
 
             K.I: EnterSubstate(InventoryView()),
             K.COMMA: PickupItems(),
+            K.D: EnterSubstate(DropItemMenu()),
         }
         super().__init__(keybindings=IN_GAME)
     def render(self):
@@ -204,6 +205,22 @@ class PickupItem(Action):
 class PickupItemMenu(ItemList):
     def __init__(self, items):
         super().__init__(PickupItem, 'Pick up which?', items, no_item_text='THIS IS A BUG, please report it')
+
+
+class DropItem(Action):
+    def __init__(self, item):
+        self.item = item
+        super().__init__(cost=100)
+    def execute(self, actor):
+        drop(self.item)
+        g.state.on_enter()
+
+class DropItemMenu(ItemList):
+    def __init__(self):
+        super().__init__(DropItem, 'Drop which?', [], no_item_text='You are carrying nothing.')
+    def on_enter(self):
+        self.items = inventory(g.player)
+        super().on_enter()
 
 
 MAIN_MENU_OPTIONS = [('Play', BeginGame(InGame())), ('Achievements', Pass()), ('Quit', QuitGame()),]

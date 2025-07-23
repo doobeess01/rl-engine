@@ -63,3 +63,8 @@ def add_to_inventory(item: Entity, actor: Entity):
             return
     item.relation_tag[IsIn] = actor
     del item.components[Position]
+
+def drop(item: Entity):
+    item.components[Position] = item.relation_tag[IsIn].components[Position]
+    item.relation_tag[IsIn] = item.relation_tag[IsIn].relation_tag[IsIn]
+    return item
