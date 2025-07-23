@@ -19,5 +19,7 @@ Roadmap:
 + [ ] Ranged targeting
 + [ ] Ranged weapons
 + [ ] Stairs/level travel
++ [ ] FOV
++ [ ] Only monsters in your FOV can see you
 
 Level procedural generation will not be included in this engine, due to the different level design demands for different games.
