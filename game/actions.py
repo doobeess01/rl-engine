@@ -1,4 +1,3 @@
-import attrs
 import copy
 
 import g

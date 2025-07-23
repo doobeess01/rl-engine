@@ -3,7 +3,7 @@ import g
 from game.components import Name, Graphic, Description, HP, Attack
 
 from game.controller import Controller
-from game.controllers import Wander, Hostile
+from game.controllers import Hostile
 
 def new_creature(
         name: str = 'unknown creature', 

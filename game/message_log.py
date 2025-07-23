@@ -1,6 +1,5 @@
 import attrs
 
-import tcod.console
 
 import g
 from game.components import Position

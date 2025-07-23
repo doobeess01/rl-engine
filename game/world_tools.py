@@ -5,7 +5,7 @@ import g
 from game.queue import Queue
 from game.message_log import MessageLog
 from game.procgen import generate_level
-from game.entity_tools import spawn_creature, spawn_item, inventory, add_to_inventory
+from game.entity_tools import spawn_creature, spawn_item, add_to_inventory
 
 from game.components import Position
 from game.tags import IsIn, IsActor

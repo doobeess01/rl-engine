@@ -1,4 +1,3 @@
-from tcod.ecs import Entity
 
 from game.actions import Wait
 

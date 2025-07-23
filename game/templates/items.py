@@ -1,6 +1,6 @@
 import g
 
-from game.components import Name, Graphic, Description, ItemCategory, ITEM_CATEGORIES
+from game.components import Name, Graphic, Description, ItemCategory
 from game.tags import IsStackable
 
 
