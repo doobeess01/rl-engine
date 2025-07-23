@@ -27,5 +27,5 @@ class Action:
 class Pass(Action):
     '''Do nothing. Has the same purpose as the pass keyword.'''
 
-    def execute(self):
+    def execute(self, actor):
         pass

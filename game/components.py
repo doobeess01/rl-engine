@@ -48,6 +48,17 @@ Attack: Final = ('Attack', int)
 
 Quantity: Final = ('Quantity', int)
 
+ItemCategory: Final = ('ItemCategory', int)
+
+ITEM_CATEGORIES = {
+    1: 'weapons',
+    2: 'armor',
+    3: 'scrolls',
+    4: 'potions',
+    5: 'staves',
+}
+
+
 # Map
 
 Tiles: Final = ('Tiles', np.ndarray)

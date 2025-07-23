@@ -18,9 +18,19 @@ class State:
             case Quit():
                 raise SystemExit
         return False
+    def _render(self):
+        if self.parent:
+            self.parent._render()
+        self.render()
     def render(self):
         pass
     def exit(self):
         if not self.parent:
             raise SystemExit
+        g.state = self.parent
         return self.parent
+    def on_enter(self):
+        '''
+        Special initialization function for... reasons.
+        '''
+        pass

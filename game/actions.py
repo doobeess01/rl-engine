@@ -1,4 +1,5 @@
 import attrs
+import copy
 
 import g
 
@@ -26,7 +27,6 @@ class Wait(Action):
     def __init__(self):
         super().__init__(cost=100)
 
-@attrs.define
 class Bump(Action):
     def __init__(self, direction):
         super().__init__()
@@ -98,12 +98,18 @@ class Select(Action):
 
 class StateAction(Action):
     def __init__(self, state: State):
+        self.state = copy.deepcopy(state)
         super().__init__()
-        self.state = state
+        
 
 class ChangeState(StateAction):
     def execute(self, actor):
+        self.state.on_enter()
         g.state = self.state
+
+class ExitState(Action):
+    def execute(self, actor):
+        g.state.exit()
 
 class BeginGame(StateAction):
     def execute(self, actor):
@@ -112,9 +118,13 @@ class BeginGame(StateAction):
 
 class EnterSubstate(StateAction):
     def execute(self, actor):
+        self.state.on_enter()
         parent = g.state
         g.state = self.state
         g.state.parent = parent
+
+        from tcod.event import KeySym as K
+        g.state.keybindings[K.ESCAPE] = ExitState()
 
 
 # OTHER ACTIONS

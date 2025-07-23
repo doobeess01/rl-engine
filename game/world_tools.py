@@ -5,7 +5,7 @@ import g
 from game.queue import Queue
 from game.message_log import MessageLog
 from game.procgen import generate_level
-from game.entity_tools import spawn_creature, spawn_item
+from game.entity_tools import spawn_creature, spawn_item, inventory, add_to_inventory
 
 from game.components import Position
 from game.tags import IsIn, IsActor
@@ -30,6 +30,8 @@ def init_world():
     spawn_creature(MONSTER, map_, position=Position(15,15))
 
     spawn_item(POTION, map_, position=Position(2,2))
+    player_potion = spawn_item(POTION, map_, position=Position(3,2))
+    add_to_inventory(player_potion, g.player)
 
     enter_level(map_)
     

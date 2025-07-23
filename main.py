@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import tcod
-import tcod.ecs
 
 import g
 
@@ -41,7 +40,7 @@ def main():
 
             # Render
             g.console.clear()
-            g.state.render()
+            g.state._render()
             g.context.present(g.console)
 
             # Process player input

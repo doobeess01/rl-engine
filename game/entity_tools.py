@@ -48,12 +48,12 @@ def inventory(entity: Entity, tags: list[str] = []):
     '''
     Return the inventory of an entity (all items with the IsIn relation to it)
     '''
-    return entity.registry.Q.all_of(relations=[(IsIn, entity)], tags=tags)
+    return [e for e in entity.registry.Q.all_of(relations=[(IsIn, entity)], tags=tags)]
 
 
 def add_to_inventory(item: Entity, actor: Entity):
     '''
-    Add an item to the player's inventory. This modifies the entities' IsIn relation, meaning it will be removed from its previous location.
+    Add an item to an entity's inventory. This modifies the entities' IsIn relation, meaning it will be removed from its previous location.
     '''
     stackable_inventory = inventory(actor, tags=[IsStackable])
     for other_item in stackable_inventory:
