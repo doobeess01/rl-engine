@@ -17,7 +17,7 @@ from game.tags import IsIn, IsActor
 from game.components import Position, Graphic, Name, MapShape, Tiles, Quantity, ItemCategory, ITEM_CATEGORIES
 
 
-# Actions (that require reference to states.py states)
+# Actions (that require reference to states.py)
 
 class PickupItems(Action):
     def execute(self, actor: Entity):

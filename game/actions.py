@@ -14,7 +14,7 @@ import game.msg as msg
 
 from game.tiles import TILES
 
-from game.components import Position, Tiles, HP, Attack, Name
+from game.components import Position, Tiles, HP, Attack, Name, Quantity
 from game.tags import IsActor, IsIn
 
 from game.entity_tools import add_to_inventory, drop
@@ -67,13 +67,17 @@ class PickupItem(Action):
         self.item = item
         super().__init__(cost=100)
     def execute(self, actor):
+        log(f'You pick up the {self.item.components[Name]}.')
         add_to_inventory(self.item, actor)
+
 
 class DropItem(Action):
     def __init__(self, item):
         self.item = item
         super().__init__(cost=100)
     def execute(self, actor):
+        quantity = self.item.components[Quantity]
+        log(f'You drop the {self.item.components[Name]}{" (x"+str(quantity)+")" if quantity > 1 else ""}.')
         drop(self.item)
         g.state.on_enter()
 
