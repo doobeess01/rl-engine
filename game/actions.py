@@ -17,7 +17,7 @@ from game.tiles import TILES
 from game.components import Position, Tiles, HP, Attack, Name
 from game.tags import IsActor, IsIn
 
-from game.entity_tools import kill
+from game.entity_tools import add_to_inventory, drop
 
 
 # GAME ACTIONS
@@ -50,9 +50,6 @@ class Move(Action):
         if TILES['walk_cost'][map_.components[Tiles][new_position.ij]]>0:
             actor.components[Position] = new_position
 
-
-
-
 class Melee(Action):
     def __init__(self, target):
         self.target = target
@@ -65,11 +62,20 @@ class Melee(Action):
         self.target.components[HP] -= damage
 
 
-@callbacks.register_component_changed(component=HP)
-def on_hp_change(entity: Entity, old: int | None, new: int | None):
-    if new is not None:
-        if new < 1:
-            kill(entity)
+class PickupItem(Action):
+    def __init__(self, item):
+        self.item = item
+        super().__init__(cost=100)
+    def execute(self, actor):
+        add_to_inventory(self.item, actor)
+
+class DropItem(Action):
+    def __init__(self, item):
+        self.item = item
+        super().__init__(cost=100)
+    def execute(self, actor):
+        drop(self.item)
+        g.state.on_enter()
 
 
 # UI ACTIONS

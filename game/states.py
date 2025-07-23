@@ -17,6 +17,19 @@ from game.tags import IsIn, IsActor
 from game.components import Position, Graphic, Name, MapShape, Tiles, Quantity, ItemCategory, ITEM_CATEGORIES
 
 
+# Actions (that require reference to states.py states)
+
+class PickupItems(Action):
+    def execute(self, actor: Entity):
+        items = inventory(actor.relation_tag[IsIn], components=[Quantity], tags=[actor.components[Position]])
+        if len(items) > 1:
+            EnterSubstate(PickupItemMenu(items))
+        elif len(items) > 0:
+            PickupItem(items[0])(actor)
+        else:
+            log('There is nothing here to pick up.', colors=((200,200,200), (0,0,0)))
+
+
 class Menu(State):
     '''Basic 1D menu state with no rendering.'''
     def __init__(self, options: list[tuple[str: Action]], cursor_start = 0):
@@ -185,35 +198,10 @@ class InventoryView(ItemList):
         self.items = inventory(g.player)
         super().on_enter()
 
-class PickupItems(Action):
-    def execute(self, actor: Entity):
-        items = inventory(actor.relation_tag[IsIn], components=[Quantity], tags=[actor.components[Position]])
-        if len(items) > 1:
-            EnterSubstate(PickupItemMenu(items))
-        elif len(items) > 0:
-            PickupItem(items[0])(actor)
-        else:
-            log('There is nothing here to pick up.', colors=((200,200,200), (0,0,0)))
-
-class PickupItem(Action):
-    def __init__(self, item):
-        self.item = item
-        super().__init__(cost=100)
-    def execute(self, actor):
-        add_to_inventory(self.item, actor)
 
 class PickupItemMenu(ItemList):
     def __init__(self, items):
         super().__init__(PickupItem, 'Pick up which?', items, no_item_text='THIS IS A BUG, please report it')
-
-
-class DropItem(Action):
-    def __init__(self, item):
-        self.item = item
-        super().__init__(cost=100)
-    def execute(self, actor):
-        drop(self.item)
-        g.state.on_enter()
 
 class DropItemMenu(ItemList):
     def __init__(self):

@@ -7,6 +7,8 @@ import g
 from game.states import MainMenu
 from game.controller import Controller
 
+import game.callbacks  # Initialize tcod.ecs callbacks
+
 
 CONSOLE_WIDTH = 100
 CONSOLE_HEIGHT = 64

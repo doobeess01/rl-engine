@@ -22,16 +22,6 @@ class Position:
     def __hash__(self):
         return hash((self.x, self.y))
 
-@callbacks.register_component_changed(component=Position)
-def on_position_changed(entity: Entity, old: Position | None, new: Position | None) -> None:
-    '''Aesthetically pleasing means of finding entity at any given coordinate.'''
-    if old == new:
-        return
-    if old:
-        entity.tags.remove(old)
-    if new:
-        entity.tags.add(new)
-
 
 @attrs.define
 class Graphic:
