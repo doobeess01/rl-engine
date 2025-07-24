@@ -10,7 +10,7 @@ from game.state import State
 from game.world_tools import init_world
 
 from game.message_log import log
-import game.msg as msg
+import game.colors as colors
 
 from game.tiles import TILES
 
@@ -57,7 +57,7 @@ class Melee(Action):
 
     def execute(self, actor):
         damage = actor.components[Attack]
-        colors = msg.ATTACK if actor != g.player else ((255,255,255),(0,0,0))
+        colors = colors.MSG_ATTACK if actor != g.player else ((255,255,255),(0,0,0))
         log(f'{actor.components[Name]} attacks {self.target.components[Name]} for {damage} damage!', colors)
         self.target.components[HP] -= damage
 

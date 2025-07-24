@@ -29,3 +29,11 @@ POTION = new_item(
     desc = 'A potion',
     category = 4,
 )
+
+
+SWORD = new_item(
+    name = 'sword',
+    graphic = Graphic(ord('/'), (99,55,0),(0,0,0)),
+    desc = 'A sword',
+    category = 1,
+)

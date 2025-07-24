@@ -16,6 +16,8 @@ from game.entity_tools import inventory, add_to_inventory, drop
 from game.tags import IsIn, IsActor
 from game.components import Position, Graphic, Name, MapShape, Tiles, Quantity, ItemCategory, ITEM_CATEGORIES
 
+from game.colors import CATEGORY_COLORS
+
 
 # Actions (that require reference to states.py)
 
@@ -128,22 +130,11 @@ class InGame(State):
         g.registry[None].components[MessageLog].render(Position(0,56),7)
 
 
-class ToggleCategoryVisibility(Action):
-    def __init__(self, category: int):
-        self.category = category
-        super().__init__()
-    def execute(self, actor):
-        try:
-            g.state.shown_categories[self.category] = not g.state.shown_categories[self.category]  # Toggle
-            g.state.on_enter()
-        except AttributeError:
-            self.invalid_action_error()
-
-
 class ItemList(Menu):
     def __init__(self, action: Action, title: str, items: list, no_item_text: str = '[no items]'):
         self.action = action
         self.items = items
+        self.title = title
         self.shown_categories = {category: True for category in ITEM_CATEGORIES}
         super().__init__([])
 
@@ -157,9 +148,10 @@ class ItemList(Menu):
                 sorted_inventory[item.components[ItemCategory]] = [item]
         for category in ITEM_CATEGORIES:
             if category in sorted_inventory:
-                options.append((ITEM_CATEGORIES[category], ToggleCategoryVisibility(category)))
                 for item in sorted_inventory.get(category, []) if self.shown_categories[category] else []:
-                    options.append((item.components[Name], self.action(item)))
+                    quantity = item.components[Quantity]
+                    multiple_text = f' (x{str(quantity)})' if quantity > 1 else ''
+                    options.append((item.components[Name]+multiple_text, self.action(item)))
 
         self.options = options
 
@@ -167,24 +159,15 @@ class ItemList(Menu):
         if self.items:
             g.console.draw_frame(
                 5,5,
-                max([len(option[0]) for option in self.options])+(5*(max([item.components[Quantity] for item in self.items])>1))+4,len(self.options)+4,
+                max(*[len(option[0]) for option in self.options], len(self.title))+2, len(self.options)+4,
                 fg=(255,255,255),bg=(0,0,0)
             )
-            g.console.print(6,6,'Inventory')
-            item_index = 0
+            g.console.print(6,6,self.title)
             for i,option in enumerate(self.options):
-                indent = 3
-                if isinstance(option[1], ToggleCategoryVisibility):
-                    indent = 0
-                    multiple_text = ''
-                else:
-                    quantity = self.items[item_index].components[Quantity]
-                    multiple_text = f' (x{str(quantity)})' if quantity > 1 else ''
-                    item_index += 1
-                color = ((255,255,255),(0,0,0))
+                color = CATEGORY_COLORS[self.items[i].components[ItemCategory]]
                 if i == self.cursor:
                     color = ((0,0,0),(255,255,255))
-                g.console.print(6+indent,8+i, option[0]+multiple_text, fg=color[0], bg=color[1])
+                g.console.print(6,8+i, option[0], fg=color[0], bg=color[1])
         else:
             text = 'You are carrying nothing.'
             g.console.draw_frame(5,5,len(text)+2,3,fg=(255,255,255),bg=(0,0,0))

@@ -5,7 +5,7 @@ from game.components import Position, Name, Quantity
 from game.tags import IsIn, IsActor, IsStackable
 
 from game.message_log import log
-import game.msg as msg
+import game.colors as colors
 
 
 # Generic functions
@@ -28,7 +28,7 @@ def spawn_creature(template: Entity, map_: Entity, position: Position, component
 
 def kill(actor: Entity):
     g.queue().remove(actor)
-    log(f'{actor.components[Name]} dies!', msg.DEATH)
+    log(f'{actor.components[Name]} dies!', colors.MSG_DEATH)
     actor.clear()
 
 
