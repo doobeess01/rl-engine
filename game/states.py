@@ -166,7 +166,7 @@ class ItemList(Menu):
             for i,option in enumerate(self.options):
                 color = CATEGORY_COLORS[self.items[i].components[ItemCategory]]
                 if i == self.cursor:
-                    color = ((0,0,0),(255,255,255))
+                    color = ((color[1]),(color[0]))
                 g.console.print(6,8+i, option[0], fg=color[0], bg=color[1])
         else:
             text = 'You are carrying nothing.'
