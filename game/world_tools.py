@@ -10,14 +10,21 @@ from game.entity_tools import spawn_creature, spawn_item, add_to_inventory
 from game.components import Position
 from game.tags import IsIn, IsActor
 
+from game.action import Action
 from game.actions import StateAction, ChangeState
 
 from game.controller import Controller
 
 
+class Timekeep(Action):
+    def __init__(self, full_turn=100):
+        super().__init__(cost=full_turn)
+    def execute(self, actor):
+        g.registry[None].components[int] += 1
+
 class Timekeeper(Controller):
     def __call__(self, actor):
-        g.registry[None].components[int] += 1
+        return Timekeep()
 
 
 class BeginGame(StateAction):
@@ -32,10 +39,11 @@ def init_world():
 
     g.registry[None].components[Queue] = Queue()
     g.registry[None].components[MessageLog] = MessageLog(width=20)
+    g.registry[None].components[int] = 0
 
     g.timekeeper = g.registry.new_entity(components={Controller: Timekeeper()})
 
-    map_ = generate_level((55,80))
+    map_ = generate_level((55,55))
 
     from game.templates.creatures import PLAYER, MONSTER
     from game.templates.items import POTION, SWORD
