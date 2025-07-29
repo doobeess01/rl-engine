@@ -1,7 +1,7 @@
 from tcod.ecs import Entity, IsA
 
 import g
-from game.components import Position, Name, Quantity
+from game.components import Position, Name, Quantity, Effects
 from game.tags import IsIn, IsActor, IsStackable
 
 from game.message_log import log
@@ -68,3 +68,10 @@ def drop(item: Entity):
     item.components[Position] = item.relation_tag[IsIn].components[Position]
     item.relation_tag[IsIn] = item.relation_tag[IsIn].relation_tag[IsIn]
     return item
+
+
+def add_effect(effect, entity):
+    if entity.components.get(Effects, 0):
+        entity.components[Effects].append(effect)
+    else:
+        entity.components[Effects] = [effect]

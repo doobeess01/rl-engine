@@ -1,4 +1,3 @@
-
 from game.actions import Wait
 
 class Controller:

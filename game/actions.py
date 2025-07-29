@@ -2,12 +2,8 @@ import copy
 
 import g
 
-from tcod.ecs import callbacks, Entity
-
 from game.action import Action
 from game.state import State
-
-from game.world_tools import init_world
 
 from game.message_log import log
 import game.colors as colors
@@ -119,11 +115,6 @@ class ChangeState(StateAction):
 class ExitState(Action):
     def execute(self, actor):
         g.state.exit()
-
-class BeginGame(StateAction):
-    def execute(self, actor):
-        init_world()
-        ChangeState(self.state)(actor)
 
 class EnterSubstate(StateAction):
     def execute(self, actor):

@@ -1,4 +1,5 @@
 from tcod.event import KeySym as K
+from tcod.ecs import Entity
 
 import g
 
@@ -11,6 +12,7 @@ from game.message_log import MessageLog
 
 from game.tiles import TILES
 
+from game.world_tools import BeginGame
 from game.entity_tools import inventory, add_to_inventory, drop
 
 from game.tags import IsIn, IsActor

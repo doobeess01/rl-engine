@@ -4,6 +4,8 @@ from typing import Final
 
 from tcod.ecs import callbacks, Entity
 
+from game.effect import Effect
+
 
 # General
 
@@ -32,6 +34,7 @@ class Graphic:
 
 Name: Final = ('Name', str)
 Description: Final = ('Description', str)
+Effects: Final = ('Effects', list[Effect])
 
 HP: Final = ('HP', int)
 Attack: Final = ('Attack', int)

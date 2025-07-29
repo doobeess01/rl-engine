@@ -10,6 +10,20 @@ from game.entity_tools import spawn_creature, spawn_item, add_to_inventory
 from game.components import Position
 from game.tags import IsIn, IsActor
 
+from game.actions import StateAction, ChangeState
+
+from game.controller import Controller
+
+
+class Timekeeper(Controller):
+    def __call__(self, actor):
+        g.registry[None].components[int] += 1
+
+
+class BeginGame(StateAction):
+    def execute(self, actor):
+        init_world()
+        ChangeState(self.state)(actor)
 
 def init_world():
     g.registry = tcod.ecs.Registry()
@@ -18,6 +32,8 @@ def init_world():
 
     g.registry[None].components[Queue] = Queue()
     g.registry[None].components[MessageLog] = MessageLog(width=20)
+
+    g.timekeeper = g.registry.new_entity(components={Controller: Timekeeper()})
 
     map_ = generate_level((55,80))
 
@@ -44,3 +60,4 @@ def enter_level(map_):
     for entity in g.registry.Q.all_of(relations=[(IsIn, map_)], tags=[IsActor]):
         if entity != g.player:
             g.queue().add(entity)
+    g.queue().add(g.timekeeper)
